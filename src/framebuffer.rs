@@ -1,5 +1,3 @@
-// framebuffer.rs - Versión Optimizada con Buffer Reutilizable
-
 use raylib::prelude::*;
 
 pub struct Framebuffer {
@@ -8,7 +6,6 @@ pub struct Framebuffer {
     pub color_buffer: Image,
     background_color: Color,
     current_color: Color,
-    // Cache para texture reutilizable
     cached_texture: Option<Texture2D>,
 }
 
@@ -26,7 +23,6 @@ impl Framebuffer {
     }
 
     pub fn clear(&mut self) {
-        // Optimización: reutilizar el buffer existente en lugar de crear uno nuevo
         for y in 0..self.height as i32 {
             for x in 0..self.width as i32 {
                 self.color_buffer.draw_pixel(x, y, self.background_color);
@@ -34,7 +30,7 @@ impl Framebuffer {
         }
     }
 
-    #[inline] // Inline para mejor rendimiento en el bucle principal
+    #[inline] 
     pub fn set_pixel(&mut self, x: u32, y: u32) {
         if x < self.width && y < self.height {
             self.color_buffer.draw_pixel(x as i32, y as i32, self.current_color);
@@ -54,7 +50,6 @@ impl Framebuffer {
         self.color_buffer.export_image(file_path);
     }
 
-    // Versión optimizada que reutiliza texturas cuando es posible
     pub fn swap_buffers(&mut self, rl: &mut RaylibHandle, thread: &RaylibThread) {
         match &self.cached_texture {
             Some(_) => {
@@ -73,7 +68,6 @@ impl Framebuffer {
             let mut d = rl.begin_drawing(thread);
             d.clear_background(Color::BLACK);
             
-            // Escalar con suavizado
             d.draw_texture_pro(
                 texture,
                 Rectangle::new(0.0, 0.0, self.width as f32, self.height as f32),
@@ -88,7 +82,6 @@ impl Framebuffer {
 
 impl Drop for Framebuffer {
     fn drop(&mut self) {
-        // Limpiar recursos si es necesario
-        // Raylib maneja automáticamente la limpieza de texturas
+
     }
 }

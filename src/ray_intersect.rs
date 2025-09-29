@@ -1,7 +1,7 @@
 use raylib::prelude::Vector3;
 use crate::material::Material;
 
-#[derive(Debug, Clone)] // Quitamos Copy porque Material ya no es Copy
+#[derive(Debug, Clone)] 
 #[allow(dead_code)]
 pub struct Intersect {
     pub point: Vector3,

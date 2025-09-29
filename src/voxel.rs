@@ -3,14 +3,12 @@ use raylib::prelude::Vector3;
 use crate::material::Material;
 use crate::ray_intersect::Intersect;
 
-/// Rejilla esparsa de voxeles optimizada para mejor rendimiento.
 #[derive(Clone)]
 pub struct VoxelGrid {
     pub cells: HashMap<(i32, i32, i32), Material>,
     bounds_min: Vector3,
     bounds_max: Vector3,
     has_bounds: bool,
-    // Cache para optimización
     center: Vector3,
     radius: f32,
     bounds_cached: bool,
@@ -29,7 +27,6 @@ impl VoxelGrid {
         }
     }
 
-    /// Inserta un voxel y actualiza los límites.
     #[inline]
     pub fn insert(&mut self, x: i32, y: i32, z: i32, m: Material) {
         self.cells.insert((x, y, z), m);
@@ -84,19 +81,16 @@ impl VoxelGrid {
         (min, max)
     }
 
-    /// Centro geométrico de los bounds (cached).
     pub fn get_center(&mut self) -> Vector3 {
         self.update_cached_values();
         self.center
     }
 
-    /// Radio de la esfera que circunscribe los bounds (cached).
     pub fn get_bounding_sphere_radius(&mut self) -> f32 {
         self.update_cached_values();
         self.radius
     }
 
-    /// Intersección rayo-voxeles optimizada con DDA 3D.
     pub fn intersect_ray(&self, ro: &Vector3, rd: &Vector3, t_max: f32, max_steps: u32) -> Intersect {
         if self.cells.is_empty() {
             return Intersect::empty();
@@ -104,7 +98,6 @@ impl VoxelGrid {
 
         let (bmin, bmax) = self.calculate_bounds();
 
-        // Test rápido de intersección con AABB
         let (mut tmin, mut tmax_box) = (0.0f32, t_max);
         for i in 0..3 {
             let (ro_i, rd_i, min_i, max_i) = match i {
@@ -136,7 +129,6 @@ impl VoxelGrid {
             }
         }
 
-        // DDA 3D optimizado
         let t_entry = if tmin < 0.0 { 0.0 } else { tmin };
         let start = Vector3::new(
             ro.x + rd.x * t_entry, 
@@ -148,17 +140,14 @@ impl VoxelGrid {
         let mut cy = start.y.floor() as i32;
         let mut cz = start.z.floor() as i32;
 
-        // Direcciones de paso
         let step_x = if rd.x > 0.0 { 1 } else { -1 };
         let step_y = if rd.y > 0.0 { 1 } else { -1 };
         let step_z = if rd.z > 0.0 { 1 } else { -1 };
 
-        // Deltas
         let t_delta_x = if rd.x.abs() < 1e-6 { f32::INFINITY } else { 1.0 / rd.x.abs() };
         let t_delta_y = if rd.y.abs() < 1e-6 { f32::INFINITY } else { 1.0 / rd.y.abs() };
         let t_delta_z = if rd.z.abs() < 1e-6 { f32::INFINITY } else { 1.0 / rd.z.abs() };
 
-        // Tiempos hasta las próximas fronteras
         let next_boundary_x = if rd.x > 0.0 { cx as f32 + 1.0 } else { cx as f32 };
         let next_boundary_y = if rd.y > 0.0 { cy as f32 + 1.0 } else { cy as f32 };
         let next_boundary_z = if rd.z > 0.0 { cz as f32 + 1.0 } else { cz as f32 };
@@ -181,21 +170,16 @@ impl VoxelGrid {
 
         let mut hit_face = 3;
 
-        // Límites para DDA
         let limit_min = (bmin.x.floor() as i32, bmin.y.floor() as i32, bmin.z.floor() as i32);
         let limit_max = (bmax.x.ceil() as i32, bmax.y.ceil() as i32, bmax.z.ceil() as i32);
 
-        // DDA principal
         for _ in 0..max_steps {
-            // Verificar límites
             if cx < limit_min.0 || cy < limit_min.1 || cz < limit_min.2 ||
                cx > limit_max.0 || cy > limit_max.1 || cz > limit_max.2 {
                 break;
             }
 
-            // Verificar si hay voxel en la celda actual
             if let Some(mat) = self.cells.get(&(cx, cy, cz)) {
-                // Calcular punto de impacto
                 let t_hit = if hit_face == 0 {
                     t_max_x - t_delta_x
                 } else if hit_face == 1 {
@@ -216,7 +200,6 @@ impl VoxelGrid {
                     ro.z + rd.z * t_hit,
                 );
 
-                // Normal según la cara impactada
                 let normal = match hit_face {
                     0 => Vector3::new(if rd.x > 0.0 { -1.0 } else { 1.0 }, 0.0, 0.0),
                     1 => Vector3::new(0.0, if rd.y > 0.0 { -1.0 } else { 1.0 }, 0.0),
@@ -224,13 +207,11 @@ impl VoxelGrid {
                     _ => Vector3::new(0.0, 1.0, 0.0),
                 };
 
-                // UV mejorado
                 let (u, v) = face_uv_optimized(&hit_point, cx, cy, cz, &normal);
 
                 return Intersect::new_with_uv(hit_point, normal, t_hit, mat.clone(), u, v);
             }
 
-            // Avanzar al siguiente voxel
             if t_max_x <= t_max_y && t_max_x <= t_max_z {
                 cx += step_x;
                 t_max_x += t_delta_x;
@@ -250,7 +231,6 @@ impl VoxelGrid {
     }
 }
 
-/// Cálculo optimizado de UV para texturas nítidas.
 #[inline]
 fn face_uv_optimized(hit: &Vector3, cx: i32, cy: i32, cz: i32, normal: &Vector3) -> (f32, f32) {
     let fx = hit.x - cx as f32;

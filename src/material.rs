@@ -20,7 +20,7 @@ pub enum MaterialType {
 #[derive(Debug, Clone)]
 pub struct Material {
     pub diffuse: Vector3,
-    pub albedo: [f32; 4], // [diffuse, specular, reflection, transparency]
+    pub albedo: [f32; 4], 
     pub specular: f32,
     pub refractive_index: f32,
     pub texture: Option<Texture>,

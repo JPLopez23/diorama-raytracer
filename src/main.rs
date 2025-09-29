@@ -156,9 +156,6 @@ fn cast_ray_recursive(ray: &Ray, state: &SharedRenderState, depth: u32) -> Color
         };
     }
 
-    // Eliminar el chequeo de bounding sphere que causa desapariciones
-    // Solo verificamos si hay intersección directa con voxels
-
     let hit = state.grid.intersect_ray(&ray.origin, &ray.direction, MAX_RAY_DIST, MAX_DDA_STEPS);
 
     if !hit.is_intersecting {
@@ -169,7 +166,6 @@ fn cast_ray_recursive(ray: &Ray, state: &SharedRenderState, depth: u32) -> Color
         };
     }
 
-    // Shading con reflexión mejorada
     let base_color = shade_pixel_pbr(
         hit.point, hit.normal, &hit.material, hit.u, hit.v, 
         &state.sun, &state.grid, ray.origin, ray.direction
@@ -177,11 +173,10 @@ fn cast_ray_recursive(ray: &Ray, state: &SharedRenderState, depth: u32) -> Color
     
     let mut final_color = base_color;
 
-    // Reflexión con tinte del material
     let reflection_strength = hit.material.albedo[2];
     if reflection_strength > 0.01 && depth < MAX_REFLECTIONS {
         let reflect_dir = reflect_vector(ray.direction, hit.normal);
-        let reflect_origin = hit.point + hit.normal * 0.0001; // Offset reducido
+        let reflect_origin = hit.point + hit.normal * 0.0001; 
         let reflect_ray = Ray {
             origin: reflect_origin,
             direction: reflect_dir,

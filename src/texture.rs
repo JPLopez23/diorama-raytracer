@@ -63,7 +63,6 @@ impl Texture {
     }
 
     fn load_cached_texture(filename: &str, fallback_color: Vector3) -> Self {
-        // Verificar cache
         {
             let cache = TEXTURE_CACHE.lock().unwrap();
             if let Some(cached_data) = cache.get(filename) {
@@ -76,7 +75,6 @@ impl Texture {
         let image_path = format!("./images/{}", filename);
         println!("Intentando cargar: {}", image_path);
         
-        // Intentar cargar TODAS las imágenes automáticamente
         let texture_data = match image::open(&image_path) {
             Ok(img) => {
                 let rgba_img = img.to_rgba8();
@@ -107,7 +105,6 @@ impl Texture {
 
         let arc_data = Arc::new(texture_data);
         
-        // Guardar en cache
         {
             let mut cache = TEXTURE_CACHE.lock().unwrap();
             cache.insert(filename.to_string(), arc_data.clone());
