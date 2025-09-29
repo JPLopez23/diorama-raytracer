@@ -48,7 +48,7 @@ Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer impl
 
 ```bash
 git clone https://github.com/JPLopez23/diorama-raytracer.git
-cd DIIORAMA-RAYTRACER
+cd DIORAMA-RAYTRACER
 ```
 
 ## Compilar y ejecutar
