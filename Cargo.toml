@@ -1,0 +1,17 @@
+[package]
+name = "minecraft-diorama-raytracer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+raylib = "5.5"
+rayon = "1.7"
+num_cpus = "1.15"
+lazy_static = "1.4"
+image = "0.24"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
