@@ -1,18 +1,18 @@
-# Minecraft Diorama Raytracer
+## Minecraft Diorama Raytracer
 
-Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer implementado en Rust. El proyecto recrea la estructura del juego utilizando trazado de rayos con materiales físicamente realistas, reflexiones, iluminación dinámica y texturas procedurales.
+Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer implementado en Rust. El proyecto recrea la estructura del juego utilizando trazado de rayos con materiales físicamente realistas, reflexiones, iluminación dinámica y texturas.
 
 ## Materiales
 
 | Código | Material |
 |--------|----------|
-| `M` | Tierra (Dirt) |
-| `T` | Pasto (Grass) |
+| `M` | Tierra |
+| `T` | Pasto |
 | `P` | Netherrack |
-| `R` | Piedra (Stone) |
+| `R` | Piedra |
 | `L` | Magma |
-| `O` | Oro (Gold) |
-| `B` | Obsidiana (Obsidian) |
+| `O` | Oro |
+| `B` | Obsidiana |
 | `W` | Obsidiana Brillante |
 | `S` | Escaleras de Piedra |
 | `Z` | Losa de Piedra |
@@ -22,7 +22,7 @@ Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer impl
 
 ## Controles
 
-### Movimiento de Cámara
+## Movimiento de Cámara
 
 - **W** - Mover hacia adelante
 - **S** - Mover hacia atrás
@@ -32,11 +32,11 @@ Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer impl
 - **E** - Mover hacia arriba
 - **Shift Izquierdo** - Movimiento rápido (3x velocidad)
 
-### Rotación de Cámara
+## Rotación de Cámara
 
 - **Clic Izquierdo + Arrastrar** - Rotar cámara alrededor del objetivo
 
-### Opciones
+## Opciones
 
 - **K** - Activar/desactivar skybox
 - **ESC** - Salir de la aplicación
@@ -51,12 +51,12 @@ git clone https://github.com/JPLopez23/diorama-raytracer.git
 cd DIIORAMA-RAYTRACER
 ```
 
-# Compilar y ejecutar
+## Compilar y ejecutar
 
 ```bash
 cargo run --release
 ```
 
-### Video
+## Video
 
 https://youtu.be/plECcM-QDXQ
