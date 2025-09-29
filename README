@@ -23,6 +23,7 @@ Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer impl
 ## Controles
 
 ### Movimiento de Cámara
+
 - **W** - Mover hacia adelante
 - **S** - Mover hacia atrás
 - **A** - Mover a la izquierda
@@ -32,20 +33,30 @@ Un diorama de un portal en ruinas de Minecraft renderizado con un raytracer impl
 - **Shift Izquierdo** - Movimiento rápido (3x velocidad)
 
 ### Rotación de Cámara
+
 - **Clic Izquierdo + Arrastrar** - Rotar cámara alrededor del objetivo
 
 ### Opciones
+
 - **K** - Activar/desactivar skybox
 - **ESC** - Salir de la aplicación
 
 ## Instalación
+
 ```bash
 # Clonar el repositorio
+
+```bash
 git clone https://github.com/JPLopez23/diorama-raytracer.git
 cd DIIORAMA-RAYTRACER
+```
 
 # Compilar y ejecutar
+
+```bash
 cargo run --release
+```
 
 ### Video
+
 https://youtu.be/plECcM-QDXQ
